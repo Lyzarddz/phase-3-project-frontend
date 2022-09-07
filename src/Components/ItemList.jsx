@@ -136,7 +136,7 @@ export default function TransferList() {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList('Choices', left)}</Grid>
+      <Grid item>{customList('Items', left)}</Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -161,7 +161,7 @@ export default function TransferList() {
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList('Chosen', right)}</Grid>
+      <Grid item>{customList('My Items', right)}</Grid>
     </Grid>
     </div>
   );

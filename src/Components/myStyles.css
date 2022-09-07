@@ -1,6 +1,6 @@
 .primary {
   color: rgb(45, 63, 113);
-  padding-top: 20px;
+  padding-top: 80px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   text-align: center;
 }
@@ -13,7 +13,9 @@
   display: inline-block;
   font-size: 16px;
 }
-
+ .btn {
+  padding-top: 120px;
+ }
 
 
 
