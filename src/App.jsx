@@ -1,5 +1,5 @@
 import NavBar from './Components/NavBar';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Stylesheet from './Components/StyleSheet';
 import HomePage from './Components/HomePage';
 import ItemList from './Components/ItemList';
@@ -9,15 +9,14 @@ function App() {
 
 
   return (
-    // <Router>
-    <div> <NavBar/>
-    <HomePage/> </div>
+    <Router>
 
-    
-     /* <Routes>
+    <NavBar/>
+    <Routes>
      <Route path="/" element= {<HomePage />} />
+     <Route path="/list" element= {<ItemList/>} />
     </Routes>
-    </Router> */
+    </Router> 
   )
 }
 
