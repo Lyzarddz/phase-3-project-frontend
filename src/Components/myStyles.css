@@ -1,4 +1,28 @@
-.App {
+.primary {
+  color: rgb(45, 63, 113);
+  padding-top: 20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-align: center;
+}
+
+.navBtn {
+  font-size: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .App {
+
   text-align: center;
 }
 
@@ -30,4 +54,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
