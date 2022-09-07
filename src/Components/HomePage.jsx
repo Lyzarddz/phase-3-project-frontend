@@ -10,8 +10,9 @@ const HomePage = () =>{
         <div className= 'primary'>
      <h1 >Welcome to WanderList</h1>
      <h2>We help wanderlusts like yourself pack for your next adventure</h2>
-     <Button >Create List</Button>
-    
+     <div className='navBtn'>
+     <Button color="inherit" to="/" >Create List</Button>
+     </div>
      </div>
     )
    

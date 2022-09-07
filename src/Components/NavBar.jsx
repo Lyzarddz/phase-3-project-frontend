@@ -12,13 +12,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  bton: {
+    fontSize: '20px',
+    color: "white"
   },
   title: {
     flexGrow: 1,
     padding: "30px",
-    fontSize: "30px"
+    fontSize: "35px"
     
   },
 }));
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
           <Typography variant="h6" className={classes.title}>
             WanderList
           </Typography>
-          <Button color="inherit"  onClick = { goHome }>Home</Button>
+          <Button className={classes.bton} onClick = { goHome }>Home</Button>
         </Toolbar>
       </AppBar>
     </div>
