@@ -129,6 +129,15 @@ export default function TransferList() {
   return (
     <div>
         <h1 className='primary'>Let's get packing!</h1>
+
+        <form className='primary'>
+  <label>
+    Add Item:
+    <input type="text" name="Add Item" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
+
     <Grid
       container
       spacing={2}
