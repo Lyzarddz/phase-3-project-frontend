@@ -10,6 +10,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +89,11 @@ export default function TransferList() {
     setChecked(not(checked, rightChecked));
   };
 
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    
+  }
+
   const customList = (title, items) => (
     <Card>
       <CardHeader
@@ -102,6 +110,7 @@ export default function TransferList() {
         title={title}
         subheader={`${numberOfChecked(items)}/${items.length} selected`}
       />
+       
       <Divider />
       <List className={classes.list} dense component="div" role="list">
         {items.map((value) => {
@@ -116,14 +125,18 @@ export default function TransferList() {
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-            </ListItem>
+     </ListItemIcon>
+      <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+      <IconButton aria-label="delete">
+  <DeleteIcon />
+</IconButton>
+      </ListItem>
           );
         })}
         <ListItem />
       </List>
     </Card>
+    
   );
 
   return (
@@ -135,7 +148,7 @@ export default function TransferList() {
     Add Item:
     <input type="text" name="Add Item" />
   </label>
-  <input type="submit" value="Submit" />
+  <input type="submit" value="Submit" onClick= {handleAddItem} />
 </form>
 
     <Grid
