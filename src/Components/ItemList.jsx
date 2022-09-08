@@ -94,6 +94,11 @@ export default function TransferList() {
     
   }
 
+  const handleDelete= (e) => {
+    e.preventDefault();
+    console.log(e)
+  }
+
   const customList = (title, items) => (
     <Card>
       <CardHeader
@@ -117,8 +122,8 @@ export default function TransferList() {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
-            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
-              <ListItemIcon>
+            <ListItem key={value} role="listitem" button >
+              <ListItemIcon onClick={handleToggle(value)}>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
                   tabIndex={-1}
@@ -127,9 +132,10 @@ export default function TransferList() {
                 />
      </ListItemIcon>
       <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-      <IconButton aria-label="delete">
+      <IconButton aria-label="delete" onClick={handleDelete}>
   <DeleteIcon />
 </IconButton>
+<Button className='primary' >Edit</Button>
       </ListItem>
           );
         })}
