@@ -1,6 +1,6 @@
 import React from "react";
 
-const ItemList = () => {
+const ItemList = ({ itemLoad , setItemLoad }) => {
 
 }
 

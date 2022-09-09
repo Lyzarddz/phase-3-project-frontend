@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Stylesheet from './Components/StyleSheet';
 import MainPg from './Components/MainPg';
 import ItemList from './Components/ItemList';
+import Lists from './Components/Lists';
 import { useEffect, useState } from 'react';
 
 
@@ -38,7 +39,7 @@ function App() {
 
   return (
     <Router>
-      <ItemList/>
+      <ItemList itemLoad= {itemLoad} setItemLoad={setItemLoad}/>
 
     <NavBar/>
     <Routes>
