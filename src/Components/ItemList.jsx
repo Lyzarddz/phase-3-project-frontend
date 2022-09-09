@@ -151,10 +151,12 @@ export default function TransferList() {
   );
 
   return (
-    <div>
-        <h1 className='primary'>Let's get packing!</h1>
-        <form className='primary'>
-  <label>
+    <div className='primary'>
+        <h1 >Welcome to WanderList</h1>
+        <h2>-We help wanderlusts pack for their next adventure-</h2>
+        <h2 className='primary'>Let's get packing!</h2>
+        <form className='primary' >
+  <label >
     Add Item:
     <input type="text" name="Add Item" />
   </label>

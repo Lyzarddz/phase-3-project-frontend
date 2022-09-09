@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
           <Typography variant="h6" className={classes.title}>
             WanderList
           </Typography>
-          <Button className={classes.bton} onClick = { goHome }>Home</Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -1,7 +1,6 @@
 import NavBar from './Components/NavBar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Stylesheet from './Components/StyleSheet';
-import HomePage from './Components/HomePage';
 import ItemList from './Components/ItemList';
 
 
@@ -13,8 +12,7 @@ function App() {
 
     <NavBar/>
     <Routes>
-     <Route path="/" element= {<HomePage />} />
-     <Route path="/list" element= {<ItemList/>} />
+     <Route path="/" element= {<ItemList/>} />
     </Routes>
     </Router> 
   )
