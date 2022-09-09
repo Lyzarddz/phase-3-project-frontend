@@ -13,6 +13,26 @@ function App() {
   const [listLoad, setListLoad] = useState([]);
   const [itemLoad, setItemLoad] = useState([]);
 
+  useEffect(() => {
+    fetch("http://localhost:9292/lists")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setListLoad(data)
+    })
+  }, [])
+
+
+  useEffect(() => {
+    fetch("http://localhost:9292/items")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setItemLoad(data)
+      console.log(listLoad)
+    })
+  }, [])
+
+  
+
 
 
 
