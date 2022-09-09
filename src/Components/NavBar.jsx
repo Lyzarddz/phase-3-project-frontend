@@ -28,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
   const classes = useStyles();
   const navigate = useNavigate();
 
-  function goHome(e) {
-    e.preventDefault();
-    navigate("/");
-  }
 
   return (
     <div className={classes.root}>
