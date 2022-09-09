@@ -99,6 +99,11 @@ export default function TransferList() {
     console.log(e)
   }
 
+  const handleEdit = (e) => {
+    e.preventDefault();
+    console.log(e)
+  }
+
   const customList = (title, items) => (
     <Card>
       <CardHeader
@@ -135,7 +140,7 @@ export default function TransferList() {
       <IconButton aria-label="delete" onClick={handleDelete}>
   <DeleteIcon />
 </IconButton>
-<Button className='primary' >Edit</Button>
+<Button className='primary' onClick={handleEdit}>Edit</Button>
       </ListItem>
           );
         })}
@@ -148,7 +153,6 @@ export default function TransferList() {
   return (
     <div>
         <h1 className='primary'>Let's get packing!</h1>
-
         <form className='primary'>
   <label>
     Add Item:

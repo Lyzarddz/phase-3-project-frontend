@@ -16,7 +16,7 @@ const HomePage = () =>{
     return (
         <div className= 'primary'>
      <h1 >Welcome to WanderList</h1>
-     <h2 padding='20px'>We help wanderlusts like yourself pack for your next adventure</h2>
+     <h2>We help wanderlusts like yourself pack for your next adventure</h2>
      <div className='navBtn'>
      <Button className='btn' color="inherit" to="/list" onClick= {makeList} >Create List</Button>
      </div>
