@@ -30,6 +30,7 @@ const CreateItem = () => {
 
  return (
     <div className="primary">
+        <h1> Add Item to list: </h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
           <Form.Input
@@ -51,15 +52,6 @@ const CreateItem = () => {
         </Form.Group>
         <Form.Button className="btn" onClick={()=> {alert("Item Added")}}>Submit</Form.Button>
       </Form>
-
-
-    {/* <form className='primary' >
-  <label >
-    Add Item:
-    <input type="text" name="Add Item" />
-  </label>
-  <input type="submit" value="Submit" onClick= {handleAddItem} onChange= {handleChange} />
-</form> */}
     </div>
  )
 }

@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CreateItem from './CreateItem';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -147,6 +148,7 @@ export default function MainPg() {
         <ListItem />
       </List>
     </Card>
+   
     
   );
 
@@ -155,13 +157,7 @@ export default function MainPg() {
         <h1 >Welcome to WanderList</h1>
         <h2>-We help wanderlusts pack for their next adventure-</h2>
         <h2 className='primary'>Let's get packing!</h2>
-  {/* <form className='primary' >
-  <label >
-    Add Item:
-    <input type="text" name="Add Item" />
-  </label>
-  <input type="submit" value="Submit" onClick= {handleAddItem} />
-</form> */}
+        <p>(Scroll below to add custom item to list)</p>
 
     <Grid
       container
@@ -197,6 +193,8 @@ export default function MainPg() {
       </Grid>
       <Grid item>{customList('My Items', right)}</Grid>
     </Grid>
+
+    <CreateItem/>
     </div>
   );
 }
