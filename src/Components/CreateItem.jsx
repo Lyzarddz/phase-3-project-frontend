@@ -25,11 +25,12 @@ const CreateItem = () => {
           body: JSON.stringify(formData),
         })
           .then((r) => r.json());
+          console.log(formData)
       }
 
 
  return (
-    <div className="primary">
+    <div >
         <h1> Add Item to list: </h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
@@ -50,7 +51,7 @@ const CreateItem = () => {
           />
            <br></br>
         </Form.Group>
-        <Form.Button className="btn" onClick={()=> {alert("Item Added")}}>Submit</Form.Button>
+        <Form.Button  onClick={()=> {alert("Item Added")}}>Submit</Form.Button>
       </Form>
     </div>
  )

@@ -44,7 +44,7 @@ function App() {
     <NavBar/>
    
     <Routes>
-     <Route path="/" element= {<MainPg/>} />
+     <Route path="/" element= {<MainPg itemLoad= {itemLoad} setItemLoad={setItemLoad}/>} />
     </Routes>
     </Router> 
   )
