@@ -42,7 +42,7 @@ function App() {
       <ItemList itemLoad= {itemLoad} setItemLoad={setItemLoad}/>
       <Lists listLoad={listLoad} setListLoad={setListLoad}/>
     <NavBar/>
-   
+  
     <Routes>
      <Route path="/" element= {<MainPg itemLoad= {itemLoad} setItemLoad={setItemLoad}/>} />
     </Routes>

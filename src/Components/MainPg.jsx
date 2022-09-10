@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateItem from './CreateItem';
+import CreateList from './CreateList';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +132,7 @@ export default function MainPg( {itemLoad, setItemLoad}) {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
-            <ListItem key={value} role="listitem" button >
+            <ListItem key={value} role="listitem" >
               <ListItemIcon onClick={handleToggle(value)}>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
@@ -159,6 +160,7 @@ export default function MainPg( {itemLoad, setItemLoad}) {
     <div className='primary'>
         <h1 >Welcome to WanderList</h1>
         <h2>-We help wanderlusts pack for their next adventure-</h2>
+        <CreateList/>
         <h2 className='primary'>Let's get packing!</h2>
         <p>(Scroll below to add custom item to list)</p>
 
