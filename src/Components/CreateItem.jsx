@@ -25,7 +25,7 @@ const CreateItem = () => {
           body: JSON.stringify(formData),
         })
           .then((r) => r.json());
-          console.log(formData)
+          setFormData({ name: "", category:""})
       }
 
 
