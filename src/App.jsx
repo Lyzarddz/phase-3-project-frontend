@@ -46,7 +46,7 @@ function App() {
   return (
     <Router>
       <Lists listLoad={listLoad} setListLoad={setListLoad}/>
-      {/* <ItemList itemLoad={itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem} /> */}
+      <ItemList itemLoad={itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem} />
     <NavBar/>
     <Routes>
      <Route path="/" element= {<MainPg itemLoad= {itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem} items={ItemSearch}/>} />

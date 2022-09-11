@@ -53,7 +53,7 @@ const MainPg = ( {itemLoad, setItemLoad, handleDeleteItem, items}) => {
   
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([]);
+  const [left, setLeft] = useState(items);
   const [right, setRight] = useState([]);
   
 
@@ -62,9 +62,9 @@ const MainPg = ( {itemLoad, setItemLoad, handleDeleteItem, items}) => {
 
 const { id , name, category} = items;
 
-  useEffect(() => {
-    console.log(items)
-  })
+  // useEffect(() => {
+  //   console.log(items)
+  // })
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -143,7 +143,7 @@ const { id , name, category} = items;
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
-            <ListItem key={value} role="listitem" >
+            <ListItem key={value.name} role="listitem" >
               <ListItemIcon onClick={handleToggle(value)}>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
@@ -152,7 +152,7 @@ const { id , name, category} = items;
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
      </ListItemIcon>
-      <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+      <ListItemText id={labelId} primary={`${value.name}`} />
       <IconButton aria-label="delete" onClick={handleDeleteClick}>
   <DeleteIcon />
 </IconButton>
@@ -213,4 +213,4 @@ const { id , name, category} = items;
     </div>
   );
 }
-export default MainPg
+export default MainPg;
