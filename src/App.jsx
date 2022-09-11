@@ -13,6 +13,8 @@ function App() {
 
   const [listLoad, setListLoad] = useState([]);
   const [itemLoad, setItemLoad] = useState([]);
+  const [search, setSearch] = useState("");
+
 
   useEffect(() => {
     fetch("http://localhost:9292/lists")
@@ -37,14 +39,17 @@ function App() {
     setItemLoad(updatedItems);
   }
 
+  const ItemSearch = itemLoad.filter((item) =>
+  item.name?.toLowerCase().includes(search.toLowerCase())
+  )
   
   return (
     <Router>
       <Lists listLoad={listLoad} setListLoad={setListLoad}/>
-      <ItemList itemLoad={itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem}/>
+      {/* <ItemList itemLoad={itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem} /> */}
     <NavBar/>
     <Routes>
-     <Route path="/" element= {<MainPg itemLoad= {itemLoad} setItemLoad={setItemLoad}/>} />
+     <Route path="/" element= {<MainPg itemLoad= {itemLoad} setItemLoad={setItemLoad} handleDeleteItem= {handleDeleteItem} items={ItemSearch}/>} />
     </Routes>
     </Router> 
   )

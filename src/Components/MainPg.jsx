@@ -47,20 +47,23 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export default function MainPg( {itemLoad, setItemLoad}) {
+const MainPg = ( {itemLoad, setItemLoad, handleDeleteItem, items}) => {
+
+
+  
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([0, 1, 2, 3]);
-  const [right, setRight] = useState([4, 5, 6, 7]);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
   
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
-
+const { id , name, category} = items;
 
   useEffect(() => {
-
+    console.log(items)
   })
 
   const handleToggle = (value) => () => {
@@ -92,6 +95,7 @@ export default function MainPg( {itemLoad, setItemLoad}) {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
+    
   };
 
   const handleCheckedLeft = () => {
@@ -101,14 +105,19 @@ export default function MainPg( {itemLoad, setItemLoad}) {
   };
 
 
-  const handleDelete= (e) => {
+  const handleEdit = (e) => {
     e.preventDefault();
     console.log(e)
   }
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    console.log(e)
+  function handleDeleteClick () {
+    fetch(`http://localhost:9292/items/${id}`,{
+      method: "DELETE",
+    })
+    .then((resp) => resp.json())
+    .then(() => {
+      handleDeleteItem(items)
+    })
   }
 
   const customList = (title, items) => (
@@ -130,7 +139,7 @@ export default function MainPg( {itemLoad, setItemLoad}) {
        
       <Divider />
       <List className={classes.list} dense component="div" role="list">
-        {itemLoad.map((value, index) => {
+        {items.map((value) => {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
@@ -144,7 +153,7 @@ export default function MainPg( {itemLoad, setItemLoad}) {
                 />
      </ListItemIcon>
       <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-      <IconButton aria-label="delete" onClick={handleDelete}>
+      <IconButton aria-label="delete" onClick={handleDeleteClick}>
   <DeleteIcon />
 </IconButton>
 <Button className='primary' onClick={handleEdit}>Edit</Button>
@@ -204,3 +213,4 @@ export default function MainPg( {itemLoad, setItemLoad}) {
     </div>
   );
 }
+export default MainPg
