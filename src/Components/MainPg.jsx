@@ -47,24 +47,47 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-const MainPg = ( {itemLoad, setItemLoad, handleDeleteItem, items}) => {
+const MainPg = () => {
 
+ 
 
-  
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(items);
+  const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
-  
+
+  const [listLoad, setListLoad] = useState([]);
+  const [itemLoad, setItemLoad] = useState([]);
+  const [search, setSearch] = useState("");
+
+  console.log(left)
+
+  useEffect(() => {
+    fetch("http://localhost:9292/lists")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setListLoad(data)
+    })
+  }, [])
+
+
+  useEffect(() => {
+    fetch("http://localhost:9292/items")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setLeft(data)
+    })
+  }, [])
+
+  // function handleDeleteItem(itemToDelete){
+  //   const updatedItems= itemLoad.filter((item) => item.id !== itemToDelete.id)
+  //   setItemLoad(updatedItems);
+  // }
+
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
-const { id , name, category} = items;
-
-  // useEffect(() => {
-  //   console.log(items)
-  // })
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -80,14 +103,13 @@ const { id , name, category} = items;
   };
 
 
+  const numberOfChecked = (listItems) => intersection(checked, listItems).length;
 
-  const numberOfChecked = (items) => intersection(checked, items).length;
-
-  const handleToggleAll = (items) => () => {
-    if (numberOfChecked(items) === items.length) {
-      setChecked(not(checked, items));
+  const handleToggleAll = (listItems) => () => {
+    if (numberOfChecked(listItems) === listItems.length) {
+      setChecked(not(checked, listItems));
     } else {
-      setChecked(union(checked, items));
+      setChecked(union(checked, listItems));
     }
   };
 
@@ -104,46 +126,64 @@ const { id , name, category} = items;
     setChecked(not(checked, rightChecked));
   };
 
+  const { id } = left;
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    console.log(e)
+  function handleEdit() {
+    fetch(`http://localhost:9292/items/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      name: "",
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
   }
 
-  function handleDeleteClick () {
-    fetch(`http://localhost:9292/items/${id}`,{
-      method: "DELETE",
-    })
-    .then((resp) => resp.json())
-    .then(() => {
-      handleDeleteItem(items)
-    })
-  }
+  // function handleDeleteClick () {
+  //   fetch(`http://localhost:9292/items/${id}`,{
+  //     method: "DELETE",
+  //   })
+  //   .then((resp) => resp.json())
+  //   .then(() => {
+  //     handleDeleteItem(items)
+  //   })
+  // }
+ 
 
-  const customList = (title, items) => (
+
+useEffect (() => {
+console.log(left)
+}, [])
+
+
+  const customList = (title, listItems) => (
+    
     <Card>
       <CardHeader
         className={classes.cardHeader}
         avatar={
           <Checkbox
-            onClick={handleToggleAll(items)}
-            checked={numberOfChecked(items) === items.length && items.length !== 0}
-            indeterminate={numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0}
-            disabled={items.length === 0}
+            onClick={handleToggleAll(listItems)}
+            checked={numberOfChecked(listItems) === listItems.length && listItems.length !== 0}
+            indeterminate={numberOfChecked(listItems) !== listItems.length && numberOfChecked(listItems) !== 0}
+            disabled={listItems.length === 0}
             inputProps={{ 'aria-label': 'all items selected' }}
           />
         }
         title={title}
-        subheader={`${numberOfChecked(items)}/${items.length} selected`}
+        subheader={`${numberOfChecked(listItems)}/${listItems.length} selected`}
       />
        
       <Divider />
       <List className={classes.list} dense component="div" role="list">
-        {items.map((value) => {
+        {listItems.map((value) => {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
-            <ListItem key={value.name} role="listitem" >
+            <ListItem key={value.id} role="listitem" >
               <ListItemIcon onClick={handleToggle(value)}>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
@@ -152,8 +192,8 @@ const { id , name, category} = items;
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
      </ListItemIcon>
-      <ListItemText id={labelId} primary={`${value.name}`} />
-      <IconButton aria-label="delete" onClick={handleDeleteClick}>
+      <ListItemText id={labelId} primary={`${value?.category}`} />
+      <IconButton aria-label="delete" >
   <DeleteIcon />
 </IconButton>
 <Button className='primary' onClick={handleEdit}>Edit</Button>
@@ -163,9 +203,10 @@ const { id , name, category} = items;
         <ListItem />
       </List>
     </Card>
-   
-    
   );
+  
+
+  
 
   return (
     <div className='primary'>
@@ -183,6 +224,9 @@ const { id , name, category} = items;
       className={classes.root}
     >
       <Grid item>{customList('Items', left)}</Grid>
+   
+
+    
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
