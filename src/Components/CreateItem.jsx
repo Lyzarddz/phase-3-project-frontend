@@ -30,8 +30,8 @@ const CreateItem = () => {
 
 
  return (
-    <div >
-        <h1> Add Item to list: </h1>
+    <div className="itemc">
+        <h2> Add Item to list: </h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
           <Form.Input

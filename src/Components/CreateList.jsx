@@ -30,7 +30,7 @@ const CreateList = () => {
 
 
  return (
-    <div className="primary">
+    <div className="listsc">
         <h1> Create list: </h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">

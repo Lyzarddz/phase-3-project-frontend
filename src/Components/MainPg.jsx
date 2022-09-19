@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateItem from './CreateItem';
 import CreateList from './CreateList';
+import Lists from './Lists';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,18 +50,15 @@ function union(a, b) {
 
 const MainPg = () => {
 
- 
-
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
+  const [search, setSearch]= useState("")
 
   const [listLoad, setListLoad] = useState([]);
-  const [itemLoad, setItemLoad] = useState([]);
-  const [search, setSearch] = useState("");
 
-  console.log(left)
+
 
   useEffect(() => {
     fetch("http://localhost:9292/lists")
@@ -79,10 +77,17 @@ const MainPg = () => {
     })
   }, [])
 
-  // function handleDeleteItem(itemToDelete){
-  //   const updatedItems= itemLoad.filter((item) => item.id !== itemToDelete.id)
-  //   setItemLoad(updatedItems);
-  // }
+  const item = left.filter((item) =>
+  item.name?.toLowerCase().includes(search.toLowerCase())
+  )
+   const { id } = item
+
+
+  
+  function handleDeleteItem(itemToDelete){
+    const updatedItems= left.filter((item) => item.id !== itemToDelete.id)
+    setLeft(updatedItems);
+  }
 
 
   const leftChecked = intersection(checked, left);
@@ -126,7 +131,11 @@ const MainPg = () => {
     setChecked(not(checked, rightChecked));
   };
 
-  const { id } = left;
+  
+
+
+ 
+ 
 
   function handleEdit() {
     fetch(`http://localhost:9292/items/${id}`, {
@@ -142,23 +151,16 @@ const MainPg = () => {
     .then((json) => console.log(json));
   }
 
-  // function handleDeleteClick () {
-  //   fetch(`http://localhost:9292/items/${id}`,{
-  //     method: "DELETE",
-  //   })
-  //   .then((resp) => resp.json())
-  //   .then(() => {
-  //     handleDeleteItem(items)
-  //   })
-  // }
+  function handleDeleteClick () {
+    fetch(`http://localhost:9292/items/${id}`,{
+      method: "DELETE",
+    })
+    .then((resp) => resp.text())
+    .then(() => {
+      handleDeleteItem(item)
+    })
+  }
  
-
-
-useEffect (() => {
-console.log(left)
-}, [])
-
-
   const customList = (title, listItems) => (
     
     <Card>
@@ -193,7 +195,7 @@ console.log(left)
                 />
      </ListItemIcon>
       <ListItemText id={labelId} primary={`${value?.category}`} />
-      <IconButton aria-label="delete" >
+      <IconButton aria-label="delete" onClick={handleDeleteClick} >
   <DeleteIcon />
 </IconButton>
 <Button className='primary' onClick={handleEdit}>Edit</Button>
@@ -212,6 +214,7 @@ console.log(left)
     <div className='primary'>
         <h1 >Welcome to WanderList</h1>
         <h2>-We help wanderlusts pack for their next adventure-</h2>
+        <Lists/>
         <CreateList/>
         <h2 className='primary'>Let's get packing!</h2>
         <p>(Scroll below to add custom item to list)</p>
