@@ -1,9 +1,6 @@
 import React, {useState, useEffect, useReducer} from "react";
-import { Button, Divider, List , Form} from "semantic-ui-react";
+import { Divider, List , Form} from "semantic-ui-react";
 import Box from '@mui/material/Box';
-
-
-
 
 const Lists = () => {
   
@@ -85,8 +82,9 @@ const Lists = () => {
     <Divider>
     <ul className="listsh" onClick={listClick}>{lists} </ul>
     </Divider>
-    <div className="listsc">
-        <h2> Create list: </h2>
+    <div className="lists">
+   
+        <h3 > Create list: </h3>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
           <Form.Input

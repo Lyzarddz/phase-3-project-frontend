@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useEffect, useReducer } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -12,9 +12,8 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CreateItem from './CreateItem';
-
 import Lists from './Lists';
+import { Form } from "semantic-ui-react";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +54,12 @@ const MainPg = () => {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   const [search, setSearch]= useState("")
+  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: ""
+});
+  
 
   useEffect(() => {
     fetch("http://localhost:9292/items")
@@ -62,13 +67,34 @@ const MainPg = () => {
     .then((data) => {
       setLeft(data)
     })
-  }, [])
+  }, [reducerValue])
 
   const item = left.filter((item) =>
   item.name?.toLowerCase().includes(search.toLowerCase())
   )
    const { id } = item
 
+   function handleChange(event) {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  function handleSubmit() {
+    // Semantic UI React's Form component handles the preventDefault automatically!
+
+    fetch("http://localhost:9292/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => r.json());
+      setFormData({ name: "", category:""});
+      forceUpdate();
+  }
 
   
   function handleDeleteItem(itemToDelete){
@@ -119,11 +145,6 @@ const MainPg = () => {
   };
 
   
-
-
- 
- 
-
   function handleEdit() {
     fetch(`http://localhost:9292/items/${id}`, {
     method: 'PATCH',
@@ -203,6 +224,22 @@ const MainPg = () => {
         <h2>-We help wanderlusts pack for their next adventure-</h2>
         <div>
         <Lists/>
+        <br></br>
+        <br></br>
+        <h3> Add Item to list: </h3>
+      <Form onSubmit={handleSubmit} >
+        <Form.Group widths="equal">
+          <Form.Input
+            label="Name"
+            placeholder="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <br></br>
+        </Form.Group>
+        <Form.Button >Submit</Form.Button>
+      </Form>
        
         </div>
     
@@ -214,9 +251,6 @@ const MainPg = () => {
       className={classes.root}
     >
       <Grid item>{customList('Items', left)}</Grid>
-   
-
-    
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -243,7 +277,7 @@ const MainPg = () => {
       </Grid>
       <Grid item>{customList('My Items', right)}</Grid>
     </Grid>
-    <CreateItem/>
+  
     </div>
   );
 }
