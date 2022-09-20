@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateItem from './CreateItem';
-import CreateList from './CreateList';
+
 import Lists from './Lists';
 
 
@@ -55,19 +55,6 @@ const MainPg = () => {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   const [search, setSearch]= useState("")
-
-  const [listLoad, setListLoad] = useState([]);
-
-
-
-  useEffect(() => {
-    fetch("http://localhost:9292/lists")
-    .then((resp) => resp.json())
-    .then((data) => {
-      setListLoad(data)
-    })
-  }, [])
-
 
   useEffect(() => {
     fetch("http://localhost:9292/items")
@@ -194,7 +181,7 @@ const MainPg = () => {
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
      </ListItemIcon>
-      <ListItemText id={labelId} primary={`${value?.category}`} />
+      <ListItemText id={labelId} primary={`${value?.name}`} />
       <IconButton aria-label="delete" onClick={handleDeleteClick} >
   <DeleteIcon />
 </IconButton>
@@ -214,11 +201,11 @@ const MainPg = () => {
     <div className='primary'>
         <h1 >Welcome to WanderList</h1>
         <h2>-We help wanderlusts pack for their next adventure-</h2>
-        <Lists listLoad={listLoad}/>
-        <CreateList/>
-        <h2 className='primary'>Let's get packing!</h2>
-        <p>(Scroll below to add custom item to list)</p>
-
+        <div>
+        <Lists/>
+       
+        </div>
+    
     <Grid
       container
       spacing={2}

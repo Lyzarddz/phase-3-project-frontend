@@ -1,15 +1,49 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useReducer} from "react";
+import { Button, Divider, List , Form} from "semantic-ui-react";
+import Box from '@mui/material/Box';
+
 
 
 
 const Lists = () => {
   
-  
   const [listLoad, setListLoad] = useState([]);
+  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+  const [formData, setFormData] = useState({
+      name: ""
+  });
+
+  function handleChange(event) {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  }
+  
 
   const lists= listLoad.map((l, idx)=> {
     return(
-           <p key={idx}> - {l.name}</p>
+      
+          <div key={idx} style={{ width: '8%' }}>
+      <Box
+        sx={{
+          display: 'grid',
+          bgcolor: (theme) =>
+            theme.palette.mode === 'dark' ? '#101010' : 'grey.100',
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
+          border: '1px solid',
+          borderColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
+          p: 1,
+          borderRadius: 2,
+          fontSize: '0.875rem',
+          fontWeight: '700',
+        }}
+      >
+        {l.name}
+      </Box>
+    </div>
     )
 
   })
@@ -20,14 +54,57 @@ const Lists = () => {
     .then((data) => {
       setListLoad(data)
     })
-  }, [])
+  }, [reducerValue])
+
+
+  function handleSubmit() {
+    // Semantic UI React's Form component handles the preventDefault automatically!
+
+    fetch("http://localhost:9292/lists", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => r.json());
+      setFormData({ name: ""});
+      forceUpdate()
+  }
+
+
+  const listClick = (e) => {
+    console.log(e.target.value)
+  }
 
 
 
     return (
-      <div>
-    <h4  className="lists">* Your Lists: {lists} </h4>
-   </div>
+        <List>
+    <h3  className="lists">* Your Lists: </h3>
+    <Divider>
+    <ul className="listsh" onClick={listClick}>{lists} </ul>
+    </Divider>
+    <div className="listsc">
+        <h2> Create list: </h2>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group widths="equal">
+          <Form.Input
+            label="Name"
+            placeholder="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+           <br></br>
+        </Form.Group>
+        <Form.Button >Submit</Form.Button>
+      </Form>
+    </div>
+      </List>
+
+      
+     
     )
 }
 
