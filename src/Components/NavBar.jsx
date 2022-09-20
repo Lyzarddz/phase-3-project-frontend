@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
           <Typography variant="h6" className={classes.title}>
             WanderList
           </Typography>
+          <h1 className='navBtn'>-We help wanderlusts pack for their next adventure-</h1>
         </Toolbar>
       </AppBar>
     </div>

@@ -1,5 +1,5 @@
 import React , {useEffect}from "react";
-import { Card, Container, Grid , List} from "semantic-ui-react";
+import { Card,  Grid } from "semantic-ui-react";
 
 const ItemCard = ({ handleDeleteItem , items}) => {
     

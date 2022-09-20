@@ -17,12 +17,18 @@ const Lists = () => {
     });
   }
   
+  
 
   const lists= listLoad.map((l, idx)=> {
-    return(
+
+    const listClick = (e) => {
+      console.log(l.name)
+    }
+  
+    return (
       
           <div key={idx} style={{ width: '8%' }}>
-      <Box
+      <Box onClick={listClick}
         sx={{
           display: 'grid',
           bgcolor: (theme) =>
@@ -44,6 +50,7 @@ const Lists = () => {
     )
 
   })
+ 
 
   useEffect(() => {
     fetch("http://localhost:9292/lists")
@@ -70,9 +77,7 @@ const Lists = () => {
   }
 
 
-  const listClick = (e) => {
-    console.log(e.target.value)
-  }
+ 
 
 
 
@@ -80,7 +85,7 @@ const Lists = () => {
         <List>
     <h3  className="lists">* Your Lists: </h3>
     <Divider>
-    <ul className="listsh" onClick={listClick}>{lists} </ul>
+    <ul className="listsh" >{lists} </ul>
     </Divider>
     <div className="lists">
    

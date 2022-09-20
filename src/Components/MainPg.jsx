@@ -56,8 +56,7 @@ const MainPg = () => {
   const [search, setSearch]= useState("")
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
   const [formData, setFormData] = useState({
-    name: "",
-    category: ""
+    name: ""
 });
   
 
@@ -72,7 +71,8 @@ const MainPg = () => {
   const item = left.filter((item) =>
   item.name?.toLowerCase().includes(search.toLowerCase())
   )
-   const { id } = item
+   
+
 
    function handleChange(event) {
     setFormData({
@@ -97,10 +97,6 @@ const MainPg = () => {
   }
 
   
-  function handleDeleteItem(itemToDelete){
-    const updatedItems= left.filter((item) => item.id !== itemToDelete.id)
-    setLeft(updatedItems);
-  }
 
 
   const leftChecked = intersection(checked, left);
@@ -144,9 +140,9 @@ const MainPg = () => {
     setChecked(not(checked, rightChecked));
   };
 
-  
+  console.log(item.id)
   function handleEdit() {
-    fetch(`http://localhost:9292/items/${id}`, {
+    fetch(`http://localhost:9292/${item.id}`, {
     method: 'PATCH',
     body: JSON.stringify({
       name: "",
@@ -160,14 +156,20 @@ const MainPg = () => {
   }
 
   function handleDeleteClick () {
-    fetch(`http://localhost:9292/items/${id}`,{
+    fetch(`http://localhost:9292/items/`,{
       method: "DELETE",
     })
-    .then((resp) => resp.text())
+    .then((resp) => resp.json())
     .then(() => {
       handleDeleteItem(item)
     })
   }
+
+  function handleDeleteItem(itemToDelete){
+    const updatedItems= left.filter((item) => item.id !== itemToDelete.id)
+    setLeft(updatedItems);
+  }
+
  
   const customList = (title, listItems) => (
     
@@ -220,9 +222,6 @@ const MainPg = () => {
 
   return (
     <div className='primary'>
-        <h1 >Welcome to WanderList</h1>
-        <h2>-We help wanderlusts pack for their next adventure-</h2>
-        <div>
         <Lists/>
         <br></br>
         <br></br>
@@ -240,8 +239,6 @@ const MainPg = () => {
         </Form.Group>
         <Form.Button >Submit</Form.Button>
       </Form>
-       
-        </div>
     
     <Grid
       container
