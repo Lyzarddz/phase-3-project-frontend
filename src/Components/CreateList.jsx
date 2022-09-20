@@ -31,7 +31,7 @@ const CreateList = () => {
 
  return (
     <div className="listsc">
-        <h1> Create list: </h1>
+        <h2> Create list: </h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
           <Form.Input
@@ -43,7 +43,7 @@ const CreateList = () => {
           />
            <br></br>
         </Form.Group>
-        <Form.Button  onClick={()=> {alert("Add Items to Your List Below")}}>Submit</Form.Button>
+        <Form.Button >Submit</Form.Button>
       </Form>
     </div>
  )

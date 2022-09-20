@@ -1,13 +1,34 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
-const Lists = ({ setListLoad, listLoad }) => {
 
+
+const Lists = () => {
   
+  
+  const [listLoad, setListLoad] = useState([]);
 
-    return (
-        <h2  className="lists">Your Lists:</h2>
+  const lists= listLoad.map((l, idx)=> {
+    return(
+           <p key={idx}> - {l.name}</p>
     )
 
+  })
+
+  useEffect(() => {
+    fetch("http://localhost:9292/lists")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setListLoad(data)
+    })
+  }, [])
+
+
+
+    return (
+      <div>
+    <h4  className="lists">* Your Lists: {lists} </h4>
+   </div>
+    )
 }
 
 

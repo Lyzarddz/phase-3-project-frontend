@@ -214,7 +214,7 @@ const MainPg = () => {
     <div className='primary'>
         <h1 >Welcome to WanderList</h1>
         <h2>-We help wanderlusts pack for their next adventure-</h2>
-        <Lists/>
+        <Lists listLoad={listLoad}/>
         <CreateList/>
         <h2 className='primary'>Let's get packing!</h2>
         <p>(Scroll below to add custom item to list)</p>
