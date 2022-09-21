@@ -68,12 +68,10 @@ const MainPg = () => {
     })
   }, [reducerValue])
 
-  const item = left.filter((item) =>
-  item.name?.toLowerCase().includes(search.toLowerCase())
-  )
+  // const item = left.filter((item) =>
+  // item.name?.toLowerCase().includes(search.toLowerCase())
+  // )
    
-
-
    function handleChange(event) {
     setFormData({
       ...formData,
@@ -96,9 +94,6 @@ const MainPg = () => {
       forceUpdate();
   }
 
-  
-
-
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
@@ -115,7 +110,6 @@ const MainPg = () => {
 
     setChecked(newChecked);
   };
-
 
   const numberOfChecked = (listItems) => intersection(checked, listItems).length;
 
@@ -140,9 +134,8 @@ const MainPg = () => {
     setChecked(not(checked, rightChecked));
   };
 
-  console.log(item.id)
-  function handleEdit() {
-    fetch(`http://localhost:9292/${item.id}`, {
+  function handleEdit(value) {
+    fetch(`http://localhost:9292/${value.id}`, {
     method: 'PATCH',
     body: JSON.stringify({
       name: "",
@@ -152,25 +145,26 @@ const MainPg = () => {
     },
   })
     .then((response) => response.json())
-    .then((json) => console.log(json));
+    .then((json) => console.log());
+    forceUpdate();
   }
 
-  function handleDeleteClick () {
-    fetch(`http://localhost:9292/items/`,{
+  function handleDeleteItem(itemToDelete){
+    const updatedItems= left.filter((items) => items.id !== itemToDelete.id)
+    setLeft(updatedItems);
+  }
+
+  function handleDeleteClick (value) {
+    fetch(`http://localhost:9292/items/${value.id}`,{
       method: "DELETE",
     })
     .then((resp) => resp.json())
     .then(() => {
-      handleDeleteItem(item)
+      handleDeleteItem(left);
+      forceUpdate();
     })
   }
 
-  function handleDeleteItem(itemToDelete){
-    const updatedItems= left.filter((item) => item.id !== itemToDelete.id)
-    setLeft(updatedItems);
-  }
-
- 
   const customList = (title, listItems) => (
     
     <Card>
@@ -205,10 +199,10 @@ const MainPg = () => {
                 />
      </ListItemIcon>
       <ListItemText id={labelId} primary={`${value?.name}`} />
-      <IconButton aria-label="delete" onClick={handleDeleteClick} >
+      <IconButton aria-label="delete" onClick={() => handleDeleteClick(value)} >
   <DeleteIcon />
 </IconButton>
-<Button className='primary' onClick={handleEdit}>Edit</Button>
+<Button className='primary' onClick={() => handleEdit(value)}>Edit</Button>
       </ListItem>
           );
         })}
@@ -217,9 +211,6 @@ const MainPg = () => {
     </Card>
   );
   
-
-  
-
   return (
     <div className='primary'>
         <Lists/>
