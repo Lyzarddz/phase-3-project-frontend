@@ -53,7 +53,7 @@ const MainPg = () => {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
-  const [search, setSearch]= useState("")
+  const [name, setName] = useState("");
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
   const [formData, setFormData] = useState({
     name: ""
@@ -67,10 +67,6 @@ const MainPg = () => {
       setLeft(data)
     })
   }, [reducerValue])
-
-  // const item = left.filter((item) =>
-  // item.name?.toLowerCase().includes(search.toLowerCase())
-  // )
    
    function handleChange(event) {
     setFormData({
@@ -134,18 +130,32 @@ const MainPg = () => {
     setChecked(not(checked, rightChecked));
   };
 
-  function handleEdit(value) {
+  // function handleEditItem(value) {
+  //   const updatedItem= left.map((item) =>
+  //   item.id === value.id ? value : item);
+  //   setLeft(updatedItem)
+  // };
+
+  const setData = (data) => {
+    let { id, name } = data;
+    localStorage.setItem('ID', id);
+    localStorage.setItem('Name', name)
+}
+  
+
+  function handleEditClick(value) {
     fetch(`http://localhost:9292/${value.id}`, {
     method: 'PATCH',
     body: JSON.stringify({
-      name: "",
+      name,
     }),
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
+      'Content-type': 'application/json',
     },
   })
-    .then((response) => response.json())
-    .then((json) => console.log());
+    .then((response) => response.json());
+    // handleEditItem(value)
+   console.log(value.id)
     forceUpdate();
   }
 
@@ -189,20 +199,20 @@ const MainPg = () => {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
-            <ListItem key={value.id} role="listitem" >
+            <ListItem key={value.id} role="listitem" > 
               <ListItemIcon onClick={handleToggle(value)}>
-                <Checkbox
+                <Checkbox 
                   checked={checked.indexOf(value) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
      </ListItemIcon>
-      <ListItemText id={labelId} primary={`${value?.name}`} />
+      <ListItemText id={labelId}  primary={`${value?.name}`} />
       <IconButton aria-label="delete" onClick={() => handleDeleteClick(value)} >
   <DeleteIcon />
 </IconButton>
-<Button className='primary' onClick={() => handleEdit(value)}>Edit</Button>
+<Button className='primary' onClick={() => setData(value)}>Edit</Button>
       </ListItem>
           );
         })}
@@ -238,7 +248,7 @@ const MainPg = () => {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList('Items', left)}</Grid>
+      <Grid item>{customList('Items Needed', left)}</Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -263,7 +273,7 @@ const MainPg = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList('My Items', right)}</Grid>
+      <Grid item>{customList('Items Packed', right)}</Grid>
     </Grid>
   
     </div>

@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useReducer} from "react";
 import { Divider, List , Form} from "semantic-ui-react";
 import Box from '@mui/material/Box';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const Lists = () => {
   
@@ -10,6 +12,15 @@ const Lists = () => {
       name: ""
   });
 
+  useEffect(() => {
+    fetch("http://localhost:9292/lists")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setListLoad(data)
+    })
+  }, [reducerValue])
+
+
   function handleChange(event) {
     setFormData({
       ...formData,
@@ -17,14 +28,29 @@ const Lists = () => {
     });
   }
   
-  
-
   const lists= listLoad.map((l, idx)=> {
+
+
+  function handleDeleteList(listToDelete){
+    const updatedLists= lists.filter((list) => list.id !== listToDelete.id)
+    setListLoad(updatedLists);
+  }
+const { id } = l
+
+  function handleDeleteClick () {
+    fetch(`http://localhost:9292/lists/${id}`,{
+      method: "DELETE",
+    })
+    .then((resp) => resp.json())
+    .then(() => {
+      handleDeleteList(lists);
+      forceUpdate();
+    })
+  }
 
     const listClick = (e) => {
       console.log(l.name)
     }
-  
     return (
       
           <div key={idx} style={{ width: '8%' }}>
@@ -45,20 +71,14 @@ const Lists = () => {
         }}
       >
         {l.name}
+        <IconButton aria-label="delete" onClick={() => handleDeleteClick(l)} >
+  <DeleteIcon />
+</IconButton>
       </Box>
     </div>
     )
 
   })
- 
-
-  useEffect(() => {
-    fetch("http://localhost:9292/lists")
-    .then((resp) => resp.json())
-    .then((data) => {
-      setListLoad(data)
-    })
-  }, [reducerValue])
 
 
   function handleSubmit() {
@@ -77,15 +97,13 @@ const Lists = () => {
   }
 
 
- 
-
-
-
     return (
         <List>
     <h3  className="lists">* Your Lists: </h3>
     <Divider>
-    <ul className="listsh" >{lists} </ul>
+    <ul className="listsh" >{lists}
+     </ul>
+     
     </Divider>
     <div className="lists">
    
