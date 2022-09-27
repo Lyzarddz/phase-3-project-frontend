@@ -3,6 +3,8 @@ import { Divider, List , Form} from "semantic-ui-react";
 import Box from '@mui/material/Box';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@mui/material/TextField';
+
 
 const Lists = () => {
   
@@ -11,7 +13,11 @@ const Lists = () => {
   const [formData, setFormData] = useState({
       name: ""
   });
+  const [editFormData, setEditFormData] = useState({
+    name:""
+  });
 
+  
   useEffect(() => {
     fetch("http://localhost:9292/lists")
     .then((resp) => resp.json())
@@ -20,6 +26,7 @@ const Lists = () => {
     })
   }, [reducerValue])
 
+  
 
   function handleChange(event) {
     setFormData({
@@ -27,59 +34,6 @@ const Lists = () => {
       [event.target.name]: event.target.value,
     });
   }
-  
-  const lists= listLoad.map((l, idx)=> {
-
-
-  function handleDeleteList(listToDelete){
-    const updatedLists= lists.filter((list) => list.id !== listToDelete.id)
-    setListLoad(updatedLists);
-  }
-const { id } = l
-
-  function handleDeleteClick () {
-    fetch(`http://localhost:9292/lists/${id}`,{
-      method: "DELETE",
-    })
-    .then((resp) => resp.json())
-    .then(() => {
-      handleDeleteList(lists);
-      forceUpdate();
-    })
-  }
-
-    const listClick = (e) => {
-      console.log(l.name)
-    }
-    return (
-      
-          <div key={idx} style={{ width: '8%' }}>
-      <Box onClick={listClick}
-        sx={{
-          display: 'grid',
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#101010' : 'grey.100',
-          color: (theme) =>
-            theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
-          border: '1px solid',
-          borderColor: (theme) =>
-            theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
-          p: 1,
-          borderRadius: 2,
-          fontSize: '0.875rem',
-          fontWeight: '700',
-        }}
-      >
-        {l.name}
-        <IconButton aria-label="delete" onClick={() => handleDeleteClick(l)} >
-  <DeleteIcon />
-</IconButton>
-      </Box>
-    </div>
-    )
-
-  })
-
 
   function handleSubmit() {
     // Semantic UI React's Form component handles the preventDefault automatically!
@@ -95,18 +49,98 @@ const { id } = l
       setFormData({ name: ""});
       forceUpdate()
   }
+  
+  function handleDeleteList(listToDelete){
+    const updatedLists= listLoad.filter((list) => list.id !== listToDelete.id);
+    setListLoad(updatedLists);
+  }
 
+  function handleDeleteClick (value) {
+    fetch(`http://localhost:9292/lists/${value.id}`,{
+      method: "DELETE",
+    })
+    .then((resp) => resp.json())
+    .then(() => {
+      handleDeleteList(listLoad);
+      forceUpdate();
+    })
+  }
+
+
+  function handleEditList(list) {
+    const updatedList= listLoad.map((l) =>
+   l.id === list.id ? list : l);
+    setListLoad(updatedList);
+  };
+
+  function handleEditClick(value) {
+    fetch(`http://localhost:9292/lists/${value.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: editFormData
+    }),
+  })
+    .then((response) => response.json())
+    .then(() => {
+      handleEditList(listLoad);
+      forceUpdate();
+    }) 
+  }
+
+  const lists= listLoad.map((l, idx)=> {
 
     return (
-        <List>
+          <div key={idx} style={{ width: '8%' }}>
+      <Box 
+        sx={{
+          display: 'grid',
+          bgcolor: (theme) =>
+            theme.palette.mode === 'dark' ? '#101010' : 'grey.100',
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
+          border: '1px solid',
+          borderColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
+          p: 1,
+          borderRadius: 2,
+          fontSize: '0.875rem',
+          fontWeight: '700',
+        }}
+      >
+        <div className="listBtn"> 
+        <h3>{l.name} </h3> 
+        </div>
+        <div>
+          
+        <TextField id="outlined-basic" label="Rename List" variant="outlined" value={editFormData.name} 
+        onChange={(e) => {setEditFormData( e.target.value)}}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleEditClick(l)
+            setEditFormData({name:""})
+         }
+       }}
+       />
+        </div>
+        <IconButton aria-label="delete" onClick={() => handleDeleteClick(l)} >
+  <DeleteIcon fontSize="small" />
+</IconButton>
+      </Box>
+    </div>
+    )
+  })
+
+    return (
+        <List >
     <h3  className="lists">* Your Lists: </h3>
     <Divider>
-    <ul className="listsh" >{lists}
-     </ul>
-     
+    <ul className="listsh" > {lists}
+     </ul>     
     </Divider>
     <div className="lists">
-   
         <h3 > Create list: </h3>
       <Form onSubmit={handleSubmit}>
         <Form.Group widths="equal">
@@ -123,13 +157,7 @@ const { id } = l
       </Form>
     </div>
       </List>
-
-      
-     
     )
 }
-
-
-
 
 export default Lists;

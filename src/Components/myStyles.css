@@ -28,10 +28,24 @@
   padding-top: 20px;
 }
 
+.listsC {
+  text-align: right;
+  padding-bottom: 120px;
+}
+
 .listsh {
   text-align: left;
 }
 
 .itemC {
   text-align: right;
+}
+
+.listBtn {
+  text-align: center;
+}
+
+.listBtn:hover {
+  background-color: #D7DBDD;
+  text-align: center;
 }

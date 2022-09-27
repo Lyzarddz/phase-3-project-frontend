@@ -5,10 +5,6 @@ import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -35,36 +31,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function not(a, b) {
-  return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-  return a.filter((value) => b.indexOf(value) !== -1);
-}
-
-function union(a, b) {
-  return [...a, ...not(b, a)];
-}
-
 const MainPg = () => {
 
   const classes = useStyles();
-  const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([]);
-  const [right, setRight] = useState([]);
-  const [name, setName] = useState("");
+  const [item, setItem] = useState([]);
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+  const [editFormData, setEditFormData] = useState("")
+  const [toggle, setToggle] = useState(true)
   const [formData, setFormData] = useState({
     name: ""
 });
-  
 
   useEffect(() => {
     fetch("http://localhost:9292/items")
     .then((resp) => resp.json())
     .then((data) => {
-      setLeft(data)
+      setItem(data)
     })
   }, [reducerValue])
    
@@ -90,78 +72,9 @@ const MainPg = () => {
       forceUpdate();
   }
 
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  const numberOfChecked = (listItems) => intersection(checked, listItems).length;
-
-  const handleToggleAll = (listItems) => () => {
-    if (numberOfChecked(listItems) === listItems.length) {
-      setChecked(not(checked, listItems));
-    } else {
-      setChecked(union(checked, listItems));
-    }
-  };
-
-  const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
-    
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
-  };
-
-  // function handleEditItem(value) {
-  //   const updatedItem= left.map((item) =>
-  //   item.id === value.id ? value : item);
-  //   setLeft(updatedItem)
-  // };
-
-  const setData = (data) => {
-    let { id, name } = data;
-    localStorage.setItem('ID', id);
-    localStorage.setItem('Name', name)
-}
-  
-
-  function handleEditClick(value) {
-    fetch(`http://localhost:9292/${value.id}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      name,
-    }),
-    headers: {
-      'Content-type': 'application/json',
-    },
-  })
-    .then((response) => response.json());
-    // handleEditItem(value)
-   console.log(value.id)
-    forceUpdate();
-  }
-
   function handleDeleteItem(itemToDelete){
-    const updatedItems= left.filter((items) => items.id !== itemToDelete.id)
-    setLeft(updatedItems);
+    const updatedItems= item.filter((items) => items.id !== itemToDelete.id)
+    setItem(updatedItems);
   }
 
   function handleDeleteClick (value) {
@@ -170,49 +83,71 @@ const MainPg = () => {
     })
     .then((resp) => resp.json())
     .then(() => {
-      handleDeleteItem(left);
+      handleDeleteItem(item);
       forceUpdate();
     })
   }
 
+  function handleEditItem(item) {
+    const updatedItem= item.map((i) =>
+   i.id === item.id ? item : i);
+    setItem(updatedItem);
+  };
+
+  function handleEditClick(value) {
+   
+    fetch(`http://localhost:9292/lists/${value.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: editFormData
+    }),
+  })
+    .then((response) => response.json())
+    .then(() => {
+      handleEditItem(item);
+      setEditFormData("");
+      forceUpdate();
+    }) 
+  }
+  
   const customList = (title, listItems) => (
     
     <Card>
-      <CardHeader
-        className={classes.cardHeader}
-        avatar={
-          <Checkbox
-            onClick={handleToggleAll(listItems)}
-            checked={numberOfChecked(listItems) === listItems.length && listItems.length !== 0}
-            indeterminate={numberOfChecked(listItems) !== listItems.length && numberOfChecked(listItems) !== 0}
-            disabled={listItems.length === 0}
-            inputProps={{ 'aria-label': 'all items selected' }}
-          />
-        }
-        title={title}
-        subheader={`${numberOfChecked(listItems)}/${listItems.length} selected`}
-      />
-       
-      <Divider />
+      <CardHeader className='primary' title={title}/>
+        <Divider />
       <List className={classes.list} dense component="div" role="list">
         {listItems.map((value) => {
           const labelId = `transfer-list-all-item-${value}-label`;
 
           return (
+            
             <ListItem key={value.id} role="listitem" > 
-              <ListItemIcon onClick={handleToggle(value)}>
-                <Checkbox 
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-     </ListItemIcon>
-      <ListItemText id={labelId}  primary={`${value?.name}`} />
+            {toggle ? (
+              <p
+               onDoubleClick={() => {
+              setToggle(false)
+             }}
+             >{value.name} </p>
+              ) : (
+                <input
+                type='text'
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    setToggle(true)
+                 }
+               }}
+              />
+              )}
+
+
+    
       <IconButton aria-label="delete" onClick={() => handleDeleteClick(value)} >
   <DeleteIcon />
 </IconButton>
-<Button className='primary' onClick={() => setData(value)}>Edit</Button>
+
       </ListItem>
           );
         })}
@@ -248,32 +183,10 @@ const MainPg = () => {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList('Items Needed', left)}</Grid>
+      <Grid item>{customList('Items To Pack', item)}</Grid>
       <Grid item>
-        <Grid container direction="column" alignItems="center">
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
-          >
-            &gt;
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt;
-          </Button>
-        </Grid>
       </Grid>
-      <Grid item>{customList('Items Packed', right)}</Grid>
+    
     </Grid>
   
     </div>
