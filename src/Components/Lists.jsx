@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@mui/material/TextField';
 
 
-const Lists = () => {
+const Lists = ({ item, setItem , setListId }) => {
   
   const [listLoad, setListLoad] = useState([]);
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
@@ -17,7 +17,7 @@ const Lists = () => {
     name:""
   });
 
-  
+
   useEffect(() => {
     fetch("http://localhost:9292/lists")
     .then((resp) => resp.json())
@@ -26,13 +26,21 @@ const Lists = () => {
     })
   }, [reducerValue])
 
-  
 
   function handleChange(event) {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
+  }
+
+  function getListData(id) {
+    fetch(`http://localhost:9292/items?list_id=${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setItem(data);
+        setListId(id);
+      })
   }
 
   function handleSubmit() {
@@ -66,7 +74,6 @@ const Lists = () => {
     })
   }
 
-
   function handleEditList(list) {
     const updatedList= listLoad.map((l) =>
    l.id === list.id ? list : l);
@@ -90,8 +97,19 @@ const Lists = () => {
     }) 
   }
 
-  const lists= listLoad.map((l, idx)=> {
+  const items = item.map((value, id, list_id) => {
+    list_id = value.list_id
+    id = value.id
 
+    return(
+      <div>
+        <h3>{value.name}</h3>
+      </div>
+    )
+  
+  })
+
+  const lists= listLoad.map((l, idx)=> {
     return (
           <div key={idx} style={{ width: '8%' }}>
       <Box 
@@ -110,13 +128,13 @@ const Lists = () => {
           fontWeight: '700',
         }}
       >
-        <div className="listBtn"> 
+        <div className="listBtn" onClick={ () => getListData(l.id)}> 
         <h3>{l.name} </h3> 
         </div>
         <div>
           
         <TextField id="outlined-basic" label="Rename List" variant="outlined" value={editFormData.name} 
-        onChange={(e) => {setEditFormData( e.target.value)}}
+        onChange={(e) => {setEditFormData(e.target.value)}}
         onKeyPress={(e) => {
           if (e.key === "Enter") {
             handleEditClick(l)
@@ -137,7 +155,7 @@ const Lists = () => {
         <List >
     <h3  className="lists">* Your Lists: </h3>
     <Divider>
-    <ul className="listsh" > {lists}
+    <ul className="listsh"> {lists}
      </ul>     
     </Divider>
     <div className="lists">

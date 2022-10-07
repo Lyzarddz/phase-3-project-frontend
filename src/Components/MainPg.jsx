@@ -35,15 +35,18 @@ const MainPg = () => {
 
   const classes = useStyles();
   const [item, setItem] = useState([]);
+  const [listId, setListId]= useState(0);
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
   const [editFormData, setEditFormData] = useState("")
   const [toggle, setToggle] = useState(true)
+  const [disabled, setDisabled] = useState(true)
   const [formData, setFormData] = useState({
     name: ""
 });
 
+
   useEffect(() => {
-    fetch("http://localhost:9292/items")
+    fetch(`http://localhost:9292/items?list_id=${listId}`)
     .then((resp) => resp.json())
     .then((data) => {
       setItem(data)
@@ -54,8 +57,10 @@ const MainPg = () => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
+      list_id: listId
     });
   }
+
 
   function handleSubmit() {
     // Semantic UI React's Form component handles the preventDefault automatically!
@@ -68,7 +73,7 @@ const MainPg = () => {
       body: JSON.stringify(formData),
     })
       .then((r) => r.json());
-      setFormData({ name: "", category:""});
+      setFormData({ name: ""});
       forceUpdate();
   }
 
@@ -90,7 +95,7 @@ const MainPg = () => {
 
   function handleEditItem(item) {
     const updatedItem= item.map((i) =>
-   i.id === item.id ? item : i);
+    i.id === item.id ? item : i);
     setItem(updatedItem);
   };
 
@@ -114,16 +119,15 @@ const MainPg = () => {
   }
   
   const customList = (title, listItems) => (
-    
     <Card>
       <CardHeader className='primary' title={title}/>
         <Divider />
       <List className={classes.list} dense component="div" role="list">
+        
         {listItems.map((value) => {
           const labelId = `transfer-list-all-item-${value}-label`;
-
+      
           return (
-            
             <ListItem key={value.id} role="listitem" > 
             {toggle ? (
               <p
@@ -141,14 +145,10 @@ const MainPg = () => {
                }}
               />
               )}
-
-
-    
       <IconButton aria-label="delete" onClick={() => handleDeleteClick(value)} >
   <DeleteIcon />
 </IconButton>
-
-      </ListItem>
+  </ListItem>
           );
         })}
         <ListItem />
@@ -158,13 +158,15 @@ const MainPg = () => {
   
   return (
     <div className='primary'>
-        <Lists/>
+        <Lists item={item} setItem={setItem} setListId={setListId}/>
         <br></br>
         <br></br>
         <h3> Add Item to list: </h3>
       <Form onSubmit={handleSubmit} >
+      
         <Form.Group widths="equal">
           <Form.Input
+           
             label="Name"
             placeholder="Name"
             name="name"
@@ -175,7 +177,6 @@ const MainPg = () => {
         </Form.Group>
         <Form.Button >Submit</Form.Button>
       </Form>
-    
     <Grid
       container
       spacing={2}
@@ -183,12 +184,10 @@ const MainPg = () => {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList('Items To Pack', item)}</Grid>
+      <Grid item>{customList(`Items To Pack for`, item)}</Grid>
       <Grid item>
       </Grid>
-    
     </Grid>
-  
     </div>
   );
 }
